@@ -2,7 +2,9 @@ package baseball;
 
 import camp.nextstep.edu.missionutils.Randoms;
 
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class Team {
     private final int first;
@@ -16,38 +18,37 @@ public class Team {
     }
 
     public static Team createComputer() {
-        int index = 0;
         int[] computer = new int[3];
+        Set<Integer> set = new HashSet<>();
 
-        while (index < 3) {
-            int nextNumber = Randoms.pickNumberInRange(1, 9);
-            boolean isNewNumber = Arrays.stream(computer).noneMatch(i -> i == nextNumber);
-
-            if (isNewNumber) {
-                computer[index++] = nextNumber;
-            }
+        while (set.size() < 3) {
+            int number = pickNumber(set);
+            computer[set.size()] = number;
+            set.add(number);
         }
+
         return new Team(computer[0], computer[1], computer[2]);
     }
 
-    public static Team createUser(String line) {
-        validInput(line);
-        return new Team(
-                Character.getNumericValue(line.charAt(0)),
-                Character.getNumericValue(line.charAt(1)),
-                Character.getNumericValue(line.charAt(2))
-                );
+    private static int pickNumber(Set<Integer> set) {
+        int number = Randoms.pickNumberInRange(1, 9);
+        if (set.contains(number)) {
+            number = pickNumber(set);
+        }
+        return number;
     }
 
-    private static void validInput(String line) {
-        NumberUtils.collectNumeric(line);
-        if (line.length() > 3) {
-            throw new IllegalArgumentException("input length error. input=[" + line + "]");
-        }
+    public static Team createUser(String line) {
+        NumberUtils.validInput(line, 3);
+        int first = Character.getNumericValue(line.charAt(0));
+        int second = Character.getNumericValue(line.charAt(1));
+        int third = Character.getNumericValue(line.charAt(2));
+        return new Team(first, second, third);
     }
 
     public boolean result(Team computer) {
         Result result = Result.from(this, computer);
+
         printMessage(result);
 
         if (result.getStrikeCount() == 3) {
@@ -59,29 +60,43 @@ public class Team {
     }
 
     private void printMessage(Result result) {
-        StringBuilder sb = new StringBuilder();
-        int strikeCount = result.getStrikeCount();
-        int ballCount = result.getBallCount();
-
-        if (ballCount == 0 && strikeCount == 0) sb.append("낫싱");
-        if (ballCount != 0) sb.append(ballCount).append("볼");
-        if (ballCount != 0 && strikeCount != 0) sb.append(" ");
-        if (strikeCount != 0) sb.append(strikeCount).append("스트라이크");
-
-        System.out.println(sb);
+        if (result.getStrikeCount() == 0 && result.getBallCount() == 0) {
+            System.out.println("낫싱");
+            return;
+        }
+        System.out.println(result.getMessage());
     }
 
-    public int[] getArray() {
-        return new int[] {first, second, third};
+    public int getStrikeCount(Team computer) {
+        int count = calc(this.first, computer.first);
+        count += calc(this.second, computer.second);
+        count += calc(this.third, computer.third);
+        return count;
+    }
+
+    public int getBallCount(Team computer) {
+        int count = calc(this.first, computer.second);
+        count += calc(this.first, computer.third);
+
+        count += calc(this.second, computer.first);
+        count += calc(this.second, computer.third);
+
+        count += calc(this.third, computer.first);
+        count += calc(this.third, computer.second);
+
+        return count;
+    }
+
+    private int calc(int left, int right) {
+        if (left == right) {
+            return 1;
+        }
+        return 0;
     }
 
     @Override
     public String toString() {
-        return "Team{" +
-                "first=" + first +
-                ", second=" + second +
-                ", third=" + third +
-                '}';
+        return "Team{" + "first=" + first + ", second=" + second + ", third=" + third + '}';
     }
 
 }

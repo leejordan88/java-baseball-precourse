@@ -18,26 +18,21 @@ public class Result {
     }
 
     public static Result from(Team user, Team computer) {
-        int strikeCount = 0;
-        int ballCount = 0;
-
-        int[] userArray = user.getArray();
-        int[] computerArray = computer.getArray();
-
-
-        for (int u = 0; u < userArray.length; u++) {
-            for (int c = 0; c <computerArray.length; c++) {
-                if (u == c && userArray[u] == computerArray[c]) {
-                    strikeCount++;
-                    continue;
-                }
-
-                if (userArray[u] == computerArray[c]) {
-                    ballCount++;
-                }
-            }
-        }
+        int strikeCount = user.getStrikeCount(computer);
+        int ballCount = user.getBallCount(computer);
 
         return new Result(strikeCount, ballCount);
     }
+
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder();
+        if (ballCount != 0) {
+            sb.append(ballCount).append("볼 ");
+        }
+        if (strikeCount != 0) {
+            sb.append(strikeCount).append("스트라이크 ");
+        }
+        return sb.deleteCharAt(sb.length() - 1).toString();
+    }
+
 }
