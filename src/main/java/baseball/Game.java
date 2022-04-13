@@ -8,7 +8,7 @@ public class Game {
         if (computer == null) {
             computer = Team.createComputer();
         }
-        System.out.println(computer);
+//        System.out.println(computer);
         System.out.print("숫자를 입력해주세요:");
 
         // 유저 생성
