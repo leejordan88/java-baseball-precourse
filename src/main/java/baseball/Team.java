@@ -5,16 +5,27 @@ import camp.nextstep.edu.missionutils.Randoms;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class Team {
     private final int first;
     private final int second;
     private final int third;
 
-    public Team(int first, int second, int third) {
+    private Team(int first, int second, int third) {
         this.first = first;
         this.second = second;
         this.third = third;
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public int getSecond() {
+        return second;
+    }
+
+    public int getThird() {
+        return third;
     }
 
     public static Team createComputer() {

@@ -12,7 +12,7 @@ public class Result {
         return ballCount;
     }
 
-    public Result(int strikeCount, int ballCount) {
+    private Result(int strikeCount, int ballCount) {
         this.strikeCount = strikeCount;
         this.ballCount = ballCount;
     }
