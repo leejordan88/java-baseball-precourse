@@ -57,54 +57,6 @@ public class Team {
         return new Team(first, second, third);
     }
 
-    public boolean result(Team computer) {
-        Result result = Result.from(this, computer);
-
-        printMessage(result);
-
-        if (result.getStrikeCount() == 3) {
-            System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
-            return true;
-        }
-
-        return false;
-    }
-
-    private void printMessage(Result result) {
-        if (result.getStrikeCount() == 0 && result.getBallCount() == 0) {
-            System.out.println("낫싱");
-            return;
-        }
-        System.out.println(result.getMessage());
-    }
-
-    public int getStrikeCount(Team computer) {
-        int count = calc(this.first, computer.first);
-        count += calc(this.second, computer.second);
-        count += calc(this.third, computer.third);
-        return count;
-    }
-
-    public int getBallCount(Team computer) {
-        int count = calc(this.first, computer.second);
-        count += calc(this.first, computer.third);
-
-        count += calc(this.second, computer.first);
-        count += calc(this.second, computer.third);
-
-        count += calc(this.third, computer.first);
-        count += calc(this.third, computer.second);
-
-        return count;
-    }
-
-    private int calc(int left, int right) {
-        if (left == right) {
-            return 1;
-        }
-        return 0;
-    }
-
     @Override
     public String toString() {
         return "Team{" + "first=" + first + ", second=" + second + ", third=" + third + '}';

@@ -12,19 +12,62 @@ public class Result {
         return ballCount;
     }
 
-    private Result(int strikeCount, int ballCount) {
-        this.strikeCount = strikeCount;
-        this.ballCount = ballCount;
+    private Result(Team user, Team computer) {
+        this.strikeCount = getStrikeCount(user, computer);
+        this.ballCount = getBallCount(user, computer);
     }
 
     public static Result from(Team user, Team computer) {
-        int strikeCount = user.getStrikeCount(computer);
-        int ballCount = user.getBallCount(computer);
-
-        return new Result(strikeCount, ballCount);
+        return new Result(user, computer);
     }
 
-    public String getMessage() {
+    public boolean result() {
+        printMessage();
+
+        if (strikeCount == 3) {
+            System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+            return true;
+        }
+
+        return false;
+    }
+
+    private int getStrikeCount(Team user, Team computer) {
+        int count = calc(user.getFirst(), computer.getFirst());
+        count += calc(user.getSecond(), computer.getSecond());
+        count += calc(user.getThird(), computer.getThird());
+        return count;
+    }
+
+    private int getBallCount(Team user, Team computer) {
+        int count = calc(user.getFirst(), computer.getSecond());
+        count += calc(user.getFirst(), computer.getThird());
+
+        count += calc(user.getSecond(), computer.getFirst());
+        count += calc(user.getSecond(), computer.getThird());
+
+        count += calc(user.getThird(), computer.getFirst());
+        count += calc(user.getThird(), computer.getSecond());
+
+        return count;
+    }
+
+    private int calc(int left, int right) {
+        if (left == right) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private void printMessage() {
+        if (strikeCount == 0 && ballCount == 0) {
+            System.out.println("낫싱");
+            return;
+        }
+        System.out.println(getMessage());
+    }
+
+    private String getMessage() {
         StringBuilder sb = new StringBuilder();
         if (ballCount != 0) {
             sb.append(ballCount).append("볼 ");

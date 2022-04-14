@@ -14,8 +14,9 @@ public class Game {
         // 유저 생성
         String line = Console.readLine();
         Team user = Team.createUser(line);
+        Result result = Result.from(user, computer);
 
-        if (user.result(computer)) {
+        if (result.result()) {
             return isKeepGoing();
         }
 

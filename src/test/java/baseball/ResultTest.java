@@ -21,7 +21,8 @@ class ResultTest {
         Result result = Result.from(user, computer);
 
         // then
-        assertEquals("2볼 1스트라이크", result.getMessage());
+        assertEquals(2, result.getBallCount());
+        assertEquals(1, result.getStrikeCount());
     }
 
     @Test
@@ -39,7 +40,8 @@ class ResultTest {
         Result result = Result.from(user, computer);
 
         // then
-        assertEquals("3볼", result.getMessage());
+        assertEquals(3, result.getBallCount());
+        assertEquals(0, result.getStrikeCount());
     }
 
     @Test
@@ -57,7 +59,8 @@ class ResultTest {
         Result result = Result.from(user, computer);
 
         // then
-        assertEquals("3스트라이크", result.getMessage());
+        assertEquals(0, result.getBallCount());
+        assertEquals(3, result.getStrikeCount());
     }
 
 }
